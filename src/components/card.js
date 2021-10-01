@@ -1,4 +1,3 @@
-const Card = (article) => {
   // TASK 5
   // ---------------------
   // Implement this function, which should return the markup you see below.
@@ -16,10 +15,40 @@ const Card = (article) => {
   //     <span>By { authorName }</span>
   //   </div>
   // </div>
+
+import axios from "axios"
+
   //
+const Card = (article) => {
+  // create elements
+  const cardDiv = document.createElement('div')
+  const headlineDiv = document.createElement('div')
+  const authorDiv = document.createElement('div')
+  const imgContainer = document.createElement('div')
+  const authorImg = document.createElement('img')
+  const authorName = document.createElement('span')
+
+  // assign classes
+  cardDiv.classList.add('card')
+  headlineDiv.classList.add('headline')
+  authorDiv.classList.add('author')
+  imgContainer.classList.add('img-container')
+
+  // insert content
+  headlineDiv.textContent = article.headline
+  authorImg.setAttribute('src', article.authorPhoto)
+  authorName.textContent = `By ${article.authorName}`
+
+  // append children
+  cardDiv.appendChild(headlineDiv)
+  cardDiv.appendChild(authorDiv)
+    authorDiv.appendChild(imgContainer)
+      imgContainer.appendChild(authorImg)
+    authorDiv.appendChild(authorName)
+  
+    return cardDiv
 }
 
-const cardAppender = (selector) => {
   // TASK 6
   // ---------------------
   // Implement this function that takes a css selector as its only argument.
@@ -28,6 +57,19 @@ const cardAppender = (selector) => {
   // Create a card from each and every article object in the response, using the Card component.
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
+const cardAppender = (selector) => {
+  const parentElement = document.querySelector(selector)
+  axios.get(`http://localhost:5000/api/articles`)
+    .then( res => {
+      const articlesArray = Array.from(res.data.articles)
+      console.log(res.data.articles)
+      // articlesArray.forEach( topic => {
+      //   topic.forEach( article => {
+      //     parentElement.appendChild(Card(article))
+      //   })
+      // });
+    })
+    .catch(err => console.log(err))
 }
 
 export { Card, cardAppender }
